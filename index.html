@@ -1,0 +1,30 @@
+<div id="notice">
+  <p>
+    If you were sent to this website it is because of compliance reasons.<br> 
+    Your systems operator sent you to one of these pages to inform you of the person,<br> 
+    or persons responsible for the legislation that is blocking your internet access.<br>
+  </p>
+</div>
+<h1>Rejected Areas</h1>
+<div id="timezones"></div>
+
+<script>
+let Interject = [
+  'America/Utah','America/Oklahoma','America/Mississippi','America/Texas','America/Tennessee',
+  'America/Hawaii','America/Illinois','America/Vermont','America/California','America/Connecticut',
+  'America/Florida','America/Georgia','America/Louisiana','America/Utah','America/New_York',
+  'Europe/London','Australia/Sydney','Australia/Adelaide','Australia/Perth','Australia/Hobart','Asia/Colombo'
+];
+
+// Get the container div
+const container = document.getElementById('timezones');
+
+// Loop through the array and create links
+Interject.forEach(zone => {
+  const link = document.createElement('a');
+  link.href = `${zone}.html`; // like "Europe/London.html"
+  link.textContent = zone.split('/')[1]; // show just the city part
+  link.style.display = 'block'; // optional: each on its own line
+  container.appendChild(link);
+});
+</script>
