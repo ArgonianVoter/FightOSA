@@ -14,6 +14,8 @@ export const ProccessEvents = [
   {
     name: "NetChoice.",
     type: "advocates_against",
+    contacts: ["https://netchoice.org/contact-us/"]
     websites: ["https://netchoice.org/netchoice-condemns-new-yorks-new-unconstitutional-internet-censorship-law/"]
   }
 ];
+
