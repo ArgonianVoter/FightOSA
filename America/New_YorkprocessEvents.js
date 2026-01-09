@@ -1,12 +1,14 @@
 export const ProccessEvents = [
   {
-    name: "Safe for Kids Act S7694A",
-    type: "bill",
-    websites: ["https://www.nysenate.gov/legislation/bills/2023/S7694/amendment/A"]
+    name: "Mr.Somebody Davids",
+    type: "weirdos",
+    contacts: ["555-5555", "whatever@gmail.com"],
+    websites: ["www.politician.gov"],
+    addresses: ["4123 main str, WA"]
+  },
+  {
+    summary: "Test.",
+    type: "legalfight",
+    websites: ["www.stuff.com"]
   }
 ];
-
-
-
-
-
