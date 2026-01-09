@@ -70,6 +70,8 @@
 
 
 <script type="module">
+let ProccessEvents = []; // declare in outer scope
+
 const pageName = window.location.pathname
   .split("/")
   .pop()
@@ -80,13 +82,11 @@ const url = `https://argonianvoter.github.io/FightOSA/America/${pageName}process
 console.log("Dynamic import URL:", url);
 
 import(url).then(module => {
-    const ProccessEvents = module.ProccessEvents;
+    ProccessEvents = module.ProccessEvents; // assign to outer variable
     console.log("Loaded ProccessEvents:", ProccessEvents);
 
-    // Example usage after DOM loaded
-    document.addEventListener("DOMContentLoaded", () => {
-        console.log("Events on this page:", ProccessEvents);
-    });
+    // Call your DOM rendering functions here
+    renderAll(); // see next step
 }).catch(err => {
     console.error("Failed to load module:", err);
 });
