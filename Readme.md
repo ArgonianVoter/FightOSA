@@ -5,7 +5,7 @@ this repository is for civic awareness purposes only and does not condone illega
 
 in order to use this repository you need only to include this line in your html:
 
-<script src="https://argonianvoter.github.io/FightOSA/OSA_georejector.js"></script>
+```<script src="https://argonianvoter.github.io/FightOSA/OSA_georejector.js"></script>```
 
 it should be noted that this repository can assist in legal compliance but cannot guaruntee it.
 
