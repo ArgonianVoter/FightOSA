@@ -69,6 +69,108 @@
 
 
 
+<script>
+
+function Renderall(){
+    const eventTypes = ["monsters", "weirdos", "regulators_against", "advocates_against", "sponsors", "cosponsors", "abstainees", "nays"];
+
+    eventTypes.forEach(type => {
+        const containerDiv = document.getElementById(type);
+        if (!containerDiv) return; // Skip if the div doesn't exist
+
+        containerDiv.innerHTML = '';
+
+        ProccessEvents.filter(event => event.type === type)
+            .forEach(event => {
+                const container = document.createElement('div');
+
+                const nameEl = document.createElement('p');
+                nameEl.innerHTML = `<strong>${event.name}</strong>`;
+                container.appendChild(nameEl);
+
+                event.contacts.forEach(contact => {
+                    const contactEl = document.createElement('p');
+                    if (contact.includes("@")) {
+                        contactEl.innerHTML = `<a href="mailto:${contact}">${contact}</a>`;
+                    } else {
+                        contactEl.textContent = contact;
+                    }
+                    container.appendChild(contactEl);
+                });
+
+                event.websites.forEach(site => {
+                    const siteEl = document.createElement('p');
+                    let url = site.startsWith("http") ? site : "https://" + site;
+                    siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
+                    container.appendChild(siteEl);
+                });
+
+                event.addresses.forEach(address => {
+                    const addressEl = document.createElement('p');
+                    addressEl.textContent = address;
+                    container.appendChild(addressEl);
+                });
+
+                container.appendChild(document.createElement('hr'));
+                containerDiv.appendChild(container);
+            });
+    });
+
+    // Bills
+    const billsContainer = document.getElementById('bills');
+    if (billsContainer) {
+        billsContainer.innerHTML = '';
+        ProccessEvents.filter(event => event.type === "bill")
+            .forEach(bill => {
+                const nameEl = document.createElement('p');
+                nameEl.innerHTML = `<strong>${bill.name}</strong>`;
+                billsContainer.appendChild(nameEl);
+
+                bill.websites.forEach(site => {
+                    const siteEl = document.createElement('p');
+                    let url = site.startsWith("http") ? site : "https://" + site;
+                    siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
+                    billsContainer.appendChild(siteEl);
+                });
+
+                billsContainer.appendChild(document.createElement('br'));
+            });
+    }
+
+    // Legal fights
+    const fightsContainer = document.getElementById('legalfights');
+    if (fightsContainer) {
+        fightsContainer.innerHTML = '';
+        ProccessEvents.filter(event => event.type === "legalfight")
+            .forEach(fight => {
+                const block = document.createElement('div');
+                block.style.backgroundColor = '#f9f9f9';
+                block.style.padding = '10px';
+                block.style.margin = '10px 0';
+                block.style.borderRadius = '5px';
+                block.style.border = '1px solid #ddd';
+
+                if (fight.summary) {
+                    const summaryEl = document.createElement('p');
+                    summaryEl.textContent = fight.summary;
+                    block.appendChild(summaryEl);
+                }
+
+                fight.websites.forEach(site => {
+                    if (site) {
+                        const siteEl = document.createElement('p');
+                        let url = site.startsWith("http") ? site : "https://" + site;
+                        siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
+                        block.appendChild(siteEl);
+                    }
+                });
+
+                fightsContainer.appendChild(block);
+            });
+    }
+};
+
+</script>
 <script type="module">
 let ProccessEvents = []; // declare in outer scope
 
@@ -82,145 +184,15 @@ const url = `https://argonianvoter.github.io/FightOSA/America/${pageName}process
 console.log("Dynamic import URL:", url);
 
 import(url).then(module => {
-    ProccessEvents = module.ProccessEvents; // assign to outer variable
+    //ProccessEvents = module.ProccessEvents; // assign to outer variable
+	window.ProccessEvents = module.ProccessEvents; // make global
+
     console.log("Loaded ProccessEvents:", ProccessEvents);
 
     // Call your DOM rendering functions here
-    renderAll(); // see next step
+    Renderall(); // see next step
 }).catch(err => {
     console.error("Failed to load module:", err);
-});
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    const eventTypes = ["monsters", "weirdos", "regulators_against", "advocates_against", "sponsors", "cosponsors", "abstainees", "nays"];
-
-    eventTypes.forEach(type => {
-        const containerDiv = document.getElementById(type);
-        if (!containerDiv) return; // Skip if the div doesn't exist
-
-        // Clear existing content safely
-        containerDiv.innerHTML = '';
-
-        // Filter and render events of this type
-        ProccessEvents.filter(event => event.type === type)
-            .forEach(event => {
-                const container = document.createElement('div');
-
-                // Name
-                const nameEl = document.createElement('p');
-                nameEl.innerHTML = `<strong>${event.name}</strong>`;
-                container.appendChild(nameEl);
-
-                // Contacts
-                event.contacts.forEach(contact => {
-                    const contactEl = document.createElement('p');
-                    if (contact.includes("@")) {
-                        contactEl.innerHTML = `<a href="mailto:${contact}">${contact}</a>`;
-                    } else {
-                        contactEl.textContent = contact;
-                    }
-                    container.appendChild(contactEl);
-                });
-
-                // Websites
-                event.websites.forEach(site => {
-                    const siteEl = document.createElement('p');
-                    let url = site.startsWith("http") ? site : "https://" + site;
-                    siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
-                    container.appendChild(siteEl);
-                });
-
-                // Addresses
-                event.addresses.forEach(address => {
-                    const addressEl = document.createElement('p');
-                    addressEl.textContent = address;
-                    container.appendChild(addressEl);
-                });
-
-                // Horizontal separator
-                container.appendChild(document.createElement('hr'));
-
-                containerDiv.appendChild(container);
-            });
-    });
-});
-
-function renderBills(bills) {
-    const billsContainer = document.getElementById('bills');
-    if (!billsContainer) return;
-
-    // Clear any existing content
-    billsContainer.innerHTML = '';
-
-    bills.forEach(bill => {
-        // Bill name
-        const nameEl = document.createElement('p');
-        nameEl.innerHTML = `<strong>${bill.name}</strong>`;
-        billsContainer.appendChild(nameEl);
-
-        // Bill website(s)
-        bill.websites.forEach(site => {
-            const siteEl = document.createElement('p');
-            let url = site.startsWith("http") ? site : "https://" + site;
-            siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
-            billsContainer.appendChild(siteEl);
-        });
-
-        // Line break between bills
-        billsContainer.appendChild(document.createElement('br'));
-    });
-}
-
-// Call this once DOM is ready
-document.addEventListener("DOMContentLoaded", function() {
-    const bills = ProccessEvents.filter(event => event.type === "bill");
-    renderBills(bills);
-});
-
-
-function renderLegalFights(fights) {
-    const fightsContainer = document.getElementById('legalfights');
-    if (!fightsContainer) return;
-
-    // Clear existing content
-    fightsContainer.innerHTML = '';
-
-    fights.forEach(fight => {
-        // Outer block for each fight
-        const block = document.createElement('div');
-        block.style.backgroundColor = '#f9f9f9'; // off-white
-        block.style.padding = '10px';
-        block.style.margin = '10px 0';
-        block.style.borderRadius = '5px';
-        block.style.border = '1px solid #ddd';
-
-        // Summary
-        if (fight.summary) {
-            const summaryEl = document.createElement('p');
-            summaryEl.textContent = fight.summary;
-            block.appendChild(summaryEl);
-        }
-
-        // Websites
-        fight.websites.forEach(site => {
-            if (site) {
-                const siteEl = document.createElement('p');
-                let url = site.startsWith("http") ? site : "https://" + site;
-                siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
-                block.appendChild(siteEl);
-            }
-        });
-
-        fightsContainer.appendChild(block);
-    });
-}
-
-// Call this once DOM is ready
-document.addEventListener("DOMContentLoaded", function() {
-    const legalFights = ProccessEvents.filter(event => event.type === "legalfight");
-    renderLegalFights(legalFights);
 });
 
 
