@@ -9,7 +9,7 @@ export const ProccessEvents = [
   {
     name: "Safe for Kids Act S7694A",
     type: "bill",
-    websites: ["https://www.nysenate.gov/legislation/bills/2023/S7694/amendment/A"],
+    websites: ["https://www.nysenate.gov/legislation/bills/2023/S7694/amendment/A"]
   },
   {
     name: "NetChoice.",
@@ -19,6 +19,7 @@ export const ProccessEvents = [
     addresses: ["1401 K Street Nw Suite 502, Washington, DC 20005"]
   }
 ];
+
 
 
 
