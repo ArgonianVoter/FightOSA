@@ -1,0 +1,199 @@
+<strong>You have been geographically restricted for legal compliance reasons by your systems operator because of a regional online safety act.</strong>
+
+<p>you have been blocked because of these bills:</p>
+<div id="bills"></div>
+
+<p>below you can see a list of <br />Sponsors (politicians who introduced this bill)</p>
+<p>Cosponsors (politicians who supported this bill)</p>
+<p>Abstainers (Politicians who have not taken a stance yet)</p>
+<p>Rejectors(Politicians who have voted against this bill or spoken out against it)</p>
+
+<p>contact, and other information is included.</p>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Sponsors</h3>
+</td>
+<td>
+<h3>Co-sponsors</h3>
+</td>
+<td>
+<h3>Abstainers</h3>
+</td>
+<td>
+<h3>Rejectors</h3>
+</td>
+</tr>
+<tr>
+<td><div id="sponsors" style="max-height:200px; overflow:auto;">0011</div></td>
+<td><div id="cosponsors" style="max-height:200px; overflow:auto;">0101</div></td>
+<td><div id="abstainees" style="max-height:200px; overflow:auto;">1011</div></td>
+<td><div id="nays" style="max-height:200px; overflow:auto;">1001</div></td>
+</tr>
+</tbody>
+</table>
+<p>Below you can see non politicians still involved in the legal processes:</p>
+<p>Regulators For (who want or wanted this bill)</p>
+<p>Regulators Against (who spoke out against this bill or wrote opposing legislation)</p>
+<p>Advocates Against (who have taken actions against this bill)</p>
+<p>Advocates For(who have promoted this bill)</p>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Regulators Against</h3>
+</td>
+<td>
+<h3>Regulators For</h3>
+</td>
+<td>
+<h3>Advocates Against</h3>
+</td>
+<td>
+<h3>Advocates For</h3>
+</td>
+</tr>
+<tr>
+<td><div id="regulators_against" style="max-height:200px; overflow:auto;">1111</div></td>
+<td><div id="monsters" style="max-height:200px; overflow:auto;">1010</div></td>
+<td><div id="advocates_against" style="max-height:200px; overflow:auto;">0001</div></td>
+<td><div id="weirdos" style="max-height:200px; overflow:auto;">1101</div></td>
+</tr>
+</tbody>
+</table>
+<p>below you can see, legal actions relevant to this bill.&nbsp;</p>
+<p>Ongoing Legal Fights:</p>
+<div id="legalfights"></div>
+<p>&nbsp;</p>
+
+
+
+<script>
+
+function Renderall(){
+    const eventTypes = ["monsters", "weirdos", "regulators_against", "advocates_against", "sponsors", "cosponsors", "abstainees", "nays"];
+
+    eventTypes.forEach(type => {
+        const containerDiv = document.getElementById(type);
+        if (!containerDiv) return; // Skip if the div doesn't exist
+
+        containerDiv.innerHTML = '';
+
+        ProccessEvents.filter(event => event.type === type)
+            .forEach(event => {
+                const container = document.createElement('div');
+
+                const nameEl = document.createElement('p');
+                nameEl.innerHTML = `<strong>${event.name}</strong>`;
+                container.appendChild(nameEl);
+
+                event.contacts.forEach(contact => {
+                    const contactEl = document.createElement('p');
+                    if (contact.includes("@")) {
+                        contactEl.innerHTML = `<a href="mailto:${contact}">${contact}</a>`;
+                    } else {
+                        contactEl.textContent = contact;
+                    }
+                    container.appendChild(contactEl);
+                });
+
+                event.websites.forEach(site => {
+                    const siteEl = document.createElement('p');
+                    let url = site.startsWith("http") ? site : "https://" + site;
+                    siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
+                    container.appendChild(siteEl);
+                });
+
+                event.addresses.forEach(address => {
+                    const addressEl = document.createElement('p');
+                    addressEl.textContent = address;
+                    container.appendChild(addressEl);
+                });
+
+                container.appendChild(document.createElement('hr'));
+                containerDiv.appendChild(container);
+            });
+    });
+
+    // Bills
+    const billsContainer = document.getElementById('bills');
+    if (billsContainer) {
+        billsContainer.innerHTML = '';
+        ProccessEvents.filter(event => event.type === "bill")
+            .forEach(bill => {
+                const nameEl = document.createElement('p');
+                nameEl.innerHTML = `<strong>${bill.name}</strong>`;
+                billsContainer.appendChild(nameEl);
+
+                bill.websites.forEach(site => {
+                    const siteEl = document.createElement('p');
+                    let url = site.startsWith("http") ? site : "https://" + site;
+                    siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
+                    billsContainer.appendChild(siteEl);
+                });
+
+                billsContainer.appendChild(document.createElement('br'));
+            });
+    }
+
+    // Legal fights
+    const fightsContainer = document.getElementById('legalfights');
+    if (fightsContainer) {
+        fightsContainer.innerHTML = '';
+        ProccessEvents.filter(event => event.type === "legalfight")
+            .forEach(fight => {
+                const block = document.createElement('div');
+                block.style.backgroundColor = '#f9f9f9';
+                block.style.padding = '10px';
+                block.style.margin = '10px 0';
+                block.style.borderRadius = '5px';
+                block.style.border = '1px solid #ddd';
+
+                if (fight.summary) {
+                    const summaryEl = document.createElement('p');
+                    summaryEl.textContent = fight.summary;
+                    block.appendChild(summaryEl);
+                }
+
+                fight.websites.forEach(site => {
+                    if (site) {
+                        const siteEl = document.createElement('p');
+                        let url = site.startsWith("http") ? site : "https://" + site;
+                        siteEl.innerHTML = `<a href="${url}" target="_blank">${site}</a>`;
+                        block.appendChild(siteEl);
+                    }
+                });
+
+                fightsContainer.appendChild(block);
+            });
+    }
+};
+
+</script>
+<script type="module">
+let ProccessEvents = []; // declare in outer scope
+
+const pageName = window.location.pathname
+  .split("/")
+  .pop()
+  .replace(/\.html$/, "");
+
+const url = `https://argonianvoter.github.io/FightOSA/America/${pageName}processEvents.js`;
+
+console.log("Dynamic import URL:", url);
+
+import(url).then(module => {
+    //ProccessEvents = module.ProccessEvents; // assign to outer variable
+	window.ProccessEvents = module.ProccessEvents; // make global
+
+    console.log("Loaded ProccessEvents:", ProccessEvents);
+
+    // Call your DOM rendering functions here
+    Renderall(); // see next step
+}).catch(err => {
+    console.error("Failed to load module:", err);
+});
+
+
+</script>
